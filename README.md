@@ -1,6 +1,8 @@
 # Hype Asset Index
 
-Created by Zayn Remtulla. The app header displays the creator name prominently.
+Created by Zayn Remtulla.
+
+Live app: https://streetwear-hype-asset-index.streamlit.app/
 
 A Streamlit dashboard for sneaker, streetwear, and luxury resale analytics.
 
@@ -11,9 +13,12 @@ A Streamlit dashboard for sneaker, streetwear, and luxury resale analytics.
 - Estimates future resale value with base / low / high scenarios
 - Supports a unified Estimator with optional StockX link-assisted auto-fill
 - Calculates premium, liquidity, risk, scarcity, grail score, and market segment
-- Includes expanded Nike Mind 001 Slide coverage, including Fragment Black
-- Adds Hermès Birkin luxury handbag rows under the luxury resale basket
-- Uses release-aware histories so each item starts at its drop/release window and benchmarks compare from that origin date
+
+## Run locally
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 -m streamlit run app.py
 
 
 ## Important
