@@ -15,12 +15,6 @@ A Streamlit dashboard for sneaker, streetwear, and luxury resale analytics.
 - Adds Hermès Birkin luxury handbag rows under the luxury resale basket
 - Uses release-aware histories so each item starts at its drop/release window and benchmarks compare from that origin date
 
-## Run locally
-
-```bash
-python3 -m pip install -r requirements.txt
-python3 -m streamlit run app.py
-```
 
 ## Important
 
