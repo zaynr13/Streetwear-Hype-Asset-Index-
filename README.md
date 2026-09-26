@@ -1,82 +1,106 @@
 # Hype Asset Index
 
-Created by Zayn Remtulla.
+Created by Zayn Remtulla
 
-Live app: https://streetwear-hype-asset-index.streamlit.app/
+Live app:
+https://streetwear-hype-asset-index.streamlit.app/
 
-A Streamlit dashboard for sneaker, streetwear, and luxury resale analytics.
+The Hype Asset Index is a Streamlit app I made to look at sneakers, streetwear, and luxury items as investments.
 
 ## What it does
 
-- Tracks individual item growth from each item's own release window
-- Lets users estimate an item with a StockX link-assisted workflow
-- Compares sneaker, streetwear, and luxury resale baskets against S&P 500, Nike, and gold
-- Measures liquidity, risk, premium, collector/grail effects, and Investability
-- Uses a validated **Retail Scarcity Score (RSS)** based only on documented retail release structure
-- Includes a Retail Scarcity research tab with the cleaned 70-item performance test
-- Adds a correlation matrix to test diversification value
-- Adds sensitivity analysis for the Investability Score
-- Adds a chronological holdout check for the regression model
-- Keeps projections labeled as illustrative scenarios rather than price predictions
+- Tracks how much different items have gone up or down since release
+- Lets users enter an item and estimate its investment data
+- Compares resale items to the S&P 500, Nike stock, and gold
+- Looks at things like liquidity, risk, resale premium, scarcity, and overall investability
+- Uses my Retail Scarcity Score to measure how hard an item was to get at retail
+- Includes a 70-item test showing the relationship between scarcity and returns
+- Tests whether the scoring system still works when the weights are changed
+- Includes a basic holdout test for the regression model
+- Keeps future prices as examples instead of calling them actual predictions
 
 ## Retail Scarcity Score
 
-Retail Scarcity Score measures retail-release scarcity rather than exact production quantity.
+The Retail Scarcity Score, or RSS, measures how limited an item was when it originally released.
 
-**RSS = (0.45D + 0.20A + 0.35R) / (0.45I_D + 0.20I_A + 0.35I_R)**
+RSS uses 3 things:
 
-- **D — Distribution Restriction (45%)**: how narrowly the item was distributed at retail
-- **A — Access Restriction (20%)**: ordinary checkout vs FCFS, raffle/draw/password, EA/invite, or similarly controlled access
-- **R — Replenishment Scarcity (35%)**: whether equivalent authorized supply returned after launch
+- Distribution: how many places sold the item
+- Access: how hard it was to actually buy
+- Replenishment: whether more official stock came out after release
 
-Observed components use a fixed 0/25/50/75/100 rubric. If replenishment is too new to judge, R is withheld and the remaining weights are renormalized instead of guessed.
+The formula is:
 
-Resale price, resale premium, CAGR, sales volume, S&P 500 performance, brand prestige, collaboration status, and legacy scarcity scores are excluded from RSS.
+RSS = 45% Distribution + 20% Access + 35% Replenishment
 
-### Validation
+Each part is scored from 0 to 100.
 
-- 116 / 116 products scored
-- 76 high-confidence rows
-- 40 medium-confidence rows
-- 91 products with replenishment observed
-- 25 products with replenishment withheld and weights renormalized
-- 32 / 32 pre-specified anchor-order checks passed
-- RSS ranking correlations remained approximately 0.993–0.996 under major component-weight shifts
+If there is not enough information about restocks yet, that part is left out instead of guessing.
 
-Using the **final locked 116-item RSS values**, the cleaned 70-item benchmark sample gives:
+The score does not use resale price, profits, sales volume, brand hype, collaborations, or stock market performance.
 
-- Pearson **r ≈ 0.449**, **p ≈ 0.000096**
-- Spearman **ρ ≈ 0.454**, **p ≈ 0.000080**
-- Top-10 excess-return average RSS: **81.96**
-- Bottom-10 excess-return average RSS: **43.61**
-- Difference: **38.36 points**
+## RSS testing
 
-This is a moderate positive association. It does not prove that scarcity causes returns.
+I scored all 116 products in the dataset.
 
-## Data note
+- 76 had high-confidence information
+- 40 had medium-confidence information
+- 91 had enough information to score restocks
+- 25 did not, so the score was adjusted without guessing
+- All 32 of my pre-made ranking checks passed
+- Changing the weights did almost nothing to the overall rankings
 
-The production dataset contains 116 products: 95 verified market snapshots and 21 low-volume market snapshots. The RSS evidence basis and confidence fields are stored separately from market-price fields.
+I then tested RSS against returns using a cleaner group of 70 products.
 
-Historical resale paths used by several dashboard views remain prototype-estimated until full verified sold-price time series are collected. Therefore, the broader regression, correlation, event-study, and projection layers should still be treated as prototype research tools rather than final empirical evidence.
+The results were:
 
-## Investability
+- Pearson correlation: about 0.45
+- Spearman correlation: about 0.45
+- Top 10 performing items had an average RSS of about 82
+- Bottom 10 had an average RSS of about 44
 
-The current Investability Score is a proposed scoring framework:
+Basically, items that were harder to get at retail usually had better returns in this sample.
+
+That does not mean scarcity automatically causes higher returns.
+
+## Data
+
+The full dataset has 116 products.
+
+- 95 have stronger market-price data
+- 21 have lower-volume market data
+
+The scarcity research is the strongest part of the project right now.
+
+Some of the historical price charts and other parts of the dashboard still use estimated data because I do not yet have full verified sale histories for every product.
+
+Because of that, things like the regression models, event studies, correlations, and projections should still be treated as experimental.
+
+## Investability Score
+
+I also created an Investability Score.
+
+It currently uses:
 
 - 40% liquidity
-- 25% premium over retail
-- 20% inverse risk
+- 25% resale premium
+- 20% risk
 - 15% Retail Scarcity Score
 
-RSS replaces the legacy scarcity variable throughout the production dataset and app.
+The goal is to give a simple overall score for how investable an item may be.
 
-## Run locally
+## Running the app
 
-```bash
+Install the requirements:
+
 python3 -m pip install -r requirements.txt
+
+Then run:
+
 python3 -m streamlit run app.py
-```
 
-## Research note
+## Final note
 
-The Retail Scarcity Score is the strongest currently validated methodological component of the project. The broader dashboard remains a research prototype until verified transaction histories replace simulated price paths.
+The Retail Scarcity Score is currently the most tested and reliable part of the project.
+
+The rest of the dashboard is still a research prototype and would need better real sale-history data before I would treat the results as fully reliable.
